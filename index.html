@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buon Compleanno Rafy! 🎂</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0a0a1a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Georgia', serif;
+      overflow: hidden;
+      cursor: default;
+    }
+
+    /* ===== STARS ===== */
+    .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+    .star {
+      position: absolute; background: white; border-radius: 50%;
+      animation: twinkle var(--d) ease-in-out infinite alternate;
+    }
+    @keyframes twinkle {
+      from { opacity: 0.2; transform: scale(1); }
+      to   { opacity: 1;   transform: scale(1.4); }
+    }
+
+    /* ===== FLAG BANNERS (top) ===== */
+    .flags-banner {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 10px;
+      display: flex;
+      z-index: 50;
+    }
+    .flag-it, .flag-es { flex: 1; display: flex; }
+    .flag-it span:nth-child(1) { flex:1; background:#009246; }
+    .flag-it span:nth-child(2) { flex:1; background:#ffffff; }
+    .flag-it span:nth-child(3) { flex:1; background:#ce2b37; }
+    .flag-es span:nth-child(1) { flex:1; background:#c60b1e; }
+    .flag-es span:nth-child(2) { flex:2; background:#ffc400; }
+    .flag-es span:nth-child(3) { flex:1; background:#c60b1e; }
+
+    /* ===== FLAG CORNERS ===== */
+    .corner-flag {
+      position: fixed; z-index: 50;
+      font-size: 2rem; line-height: 1;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.6));
+      animation: flagFloat 3s ease-in-out infinite alternate;
+    }
+    .corner-flag.tl { top: 16px; left: 14px; animation-delay: 0s; }
+    .corner-flag.tr { top: 16px; right: 14px; animation-delay: 0.7s; }
+    .corner-flag.bl { bottom: 14px; left: 14px; animation-delay: 1.4s; }
+    .corner-flag.br { bottom: 14px; right: 14px; animation-delay: 2.1s; }
+    @keyframes flagFloat {
+      from { transform: translateY(0) rotate(-3deg); }
+      to   { transform: translateY(-8px) rotate(3deg); }
+    }
+
+    /* ===== SCENE ===== */
+    .scene {
+      position: relative; z-index: 10;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 20px;
+    }
+
+    .hint {
+      color: #ffd700; font-size: 1rem;
+      letter-spacing: 2px;
+      animation: pulse 1.5s ease-in-out infinite;
+      text-shadow: 0 0 10px #ffd70088;
+      transition: opacity 0.4s;
+      text-align: center; padding: 0 20px;
+    }
+    .hint.hidden { opacity: 0; pointer-events: none; }
+
+    .reopen-hint {
+      color: #aaaacc; font-size: 0.82rem;
+      letter-spacing: 1px; opacity: 0;
+      transition: opacity 0.4s; text-align: center;
+      padding: 0 20px;
+    }
+    .reopen-hint.visible { opacity: 0.7; }
+
+    @keyframes pulse {
+      0%,100% { opacity: 0.6; }
+      50%      { opacity: 1; }
+    }
+
+    /* ===== CHEST ===== */
+    .chest-wrapper {
+      position: relative;
+      width: 200px; height: 200px;
+      cursor: pointer;
+      filter: drop-shadow(0 0 20px #ffd70066);
+      transition: filter 0.3s;
+      perspective: 600px;
+    }
+    .chest-wrapper:hover { filter: drop-shadow(0 0 35px #ffd700cc); }
+    .chest-wrapper:hover .chest-body,
+    .chest-wrapper:hover .chest-lid { background: #8B5E1A; }
+
+    .chest-body {
+      position: absolute; bottom: 0; left: 10px;
+      width: 180px; height: 100px;
+      background: #7a4f15;
+      border-radius: 0 0 12px 12px;
+      border: 4px solid #5a3509;
+      transition: background 0.3s;
+    }
+    .chest-body::before {
+      content: ''; position: absolute;
+      top: 35px; left: -4px;
+      width: calc(100% + 8px); height: 20px;
+      background: #5a3509;
+    }
+    .chest-body::after {
+      content: ''; position: absolute;
+      top: 42px; left: 50%;
+      transform: translateX(-50%);
+      width: 36px; height: 26px;
+      background: #ffd700; border-radius: 4px;
+      border: 3px solid #b8860b;
+      box-shadow: 0 0 8px #ffd70099;
+    }
+    .plank { position: absolute; width: 6px; height: 100%; background: #5a3509; top: 0; }
+    .plank:nth-child(1) { left: 20%; }
+    .plank:nth-child(2) { left: 48%; }
+    .plank:nth-child(3) { left: 76%; }
+
+    .chest-lid {
+      position: absolute; top: 50px; left: 10px;
+      width: 180px; height: 55px;
+      background: #7a4f15;
+      border-radius: 14px 14px 0 0;
+      border: 4px solid #5a3509;
+      transform-origin: bottom center;
+      transition: transform 0.7s cubic-bezier(0.25, 1.5, 0.5, 1), background 0.3s;
+    }
+    .chest-lid::before {
+      content: ''; position: absolute;
+      top: 15px; left: -4px;
+      width: calc(100% + 8px); height: 14px;
+      background: #5a3509;
+    }
+    .chest-lid::after {
+      content: ''; position: absolute;
+      bottom: -2px; left: 50%;
+      transform: translateX(-50%);
+      width: 40px; height: 14px;
+      background: #b8860b; border-radius: 4px 4px 0 0;
+    }
+    .chest-lid.open { transform: rotateX(-120deg); }
+
+    .chest-glow {
+      position: absolute; bottom: 4px; left: 14px;
+      width: 172px; height: 96px;
+      border-radius: 0 0 8px 8px;
+      background: radial-gradient(ellipse at 50% 100%, #ffd70000, #ffd70000);
+      transition: background 0.6s 0.2s; pointer-events: none;
+    }
+    .chest-glow.lit {
+      background: radial-gradient(ellipse at 50% 100%, #ffd700aa 0%, #ff8c0066 60%, transparent 100%);
+    }
+
+    .chest-wrapper:not(.toggling):hover { animation: jiggle 0.5s ease-in-out; }
+    @keyframes jiggle {
+      0%,100% { transform: rotate(0deg); }
+      25%      { transform: rotate(-3deg); }
+      75%      { transform: rotate(3deg); }
+    }
+
+    /* ===== MESSAGE CARD ===== */
+    .message-card {
+      position: fixed; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 100;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.5s;
+      padding: 16px;
+    }
+    .message-card.visible { opacity: 1; pointer-events: auto; }
+
+    .card-backdrop {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(4px);
+    }
+
+    .card-box {
+      position: relative; z-index: 10;
+      background: linear-gradient(135deg, #1a0a2e 0%, #2a0a1e 100%);
+      border: 3px solid #ffd700;
+      border-radius: 20px;
+      padding: 28px 32px;
+      max-width: 540px; width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      text-align: center;
+      box-shadow: 0 0 60px #ffd70044, 0 0 120px #ffd70022, inset 0 0 30px #ffffff08;
+      transform: scale(0.6) translateY(40px);
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s;
+      /* scrollbar styling */
+      scrollbar-width: thin;
+      scrollbar-color: #ffd70066 transparent;
+    }
+    .card-box::-webkit-scrollbar { width: 4px; }
+    .card-box::-webkit-scrollbar-thumb { background: #ffd70066; border-radius: 2px; }
+    .message-card.visible .card-box { transform: scale(1) translateY(0); }
+
+    /* Dual flag stripe */
+    .dual-flags { display: flex; gap: 8px; margin-bottom: 20px; }
+    .flag-bar { flex: 1; height: 8px; border-radius: 4px; overflow: hidden; display: flex; }
+    .flag-bar span { flex: 1; }
+    .flag-bar.it span:nth-child(1) { background: #009246; }
+    .flag-bar.it span:nth-child(2) { background: #ffffff; }
+    .flag-bar.it span:nth-child(3) { background: #ce2b37; }
+    .flag-bar.es span:nth-child(1) { background: #c60b1e; }
+    .flag-bar.es span:nth-child(2) { flex: 2; background: #ffc400; }
+    .flag-bar.es span:nth-child(3) { background: #c60b1e; }
+
+    .card-emoji {
+      font-size: 3rem;
+      animation: floatEmoji 2.5s ease-in-out infinite;
+      display: block; margin-bottom: 12px;
+    }
+    @keyframes floatEmoji {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-10px); }
+    }
+
+    .card-title { font-size: 1.7rem; color: #ffd700; text-shadow: 0 0 20px #ffd700; margin-bottom: 8px; letter-spacing: 2px; }
+    .card-name  { font-size: 2.4rem; color: #fff; font-weight: bold; margin-bottom: 18px; animation: nameGlow 2s ease-in-out infinite alternate; }
+    @keyframes nameGlow {
+      from { text-shadow: 0 0 20px #ff88aa88; }
+      to   { text-shadow: 0 0 40px #ff88aaff, 0 0 60px #ff44aaaa; }
+    }
+
+    .card-text { color: #e0d0ff; font-size: 1rem; line-height: 1.9; margin-bottom: 18px; }
+    .card-text em { color: #ffd700; font-style: normal; }
+
+    /* Photo gallery */
+    .card-photos { display: flex; gap: 10px; margin: 16px 0; justify-content: center; }
+    .card-photos img {
+      width: 48%; max-height: 220px; object-fit: cover;
+      border-radius: 12px; border: 3px solid #ffd700;
+      box-shadow: 0 0 20px #ffd70066;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .card-photos img:hover { transform: scale(1.04); box-shadow: 0 0 35px #ffd700cc; }
+
+    .card-flags { font-size: 1.5rem; letter-spacing: 6px; margin-bottom: 14px; display: block; color: #ffffff; }
+    .card-sign  { color: #9999bb; font-size: 0.86rem; letter-spacing: 1px; margin-top: 4px; }
+
+    .close-btn {
+      margin-top: 20px; padding: 12px 32px;
+      background: linear-gradient(90deg, #009246, #ffffff 50%, #ce2b37);
+      border: none; border-radius: 50px;
+      font-size: 1rem; font-weight: bold;
+      cursor: pointer; color: #1a0a00; letter-spacing: 1px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px #ffd70066;
+    }
+    .close-btn:hover { transform: scale(1.07); box-shadow: 0 6px 30px #ffd700aa; }
+
+    /* ===== CONFETTI ===== */
+    .confetti-piece {
+      position: fixed; opacity: 0; z-index: 99; pointer-events: none;
+      animation: confettiFall var(--dur) ease-in var(--delay) forwards;
+    }
+    @keyframes confettiFall {
+      0%   { transform: translateY(-20px) rotate(0deg) scale(1); opacity: 1; }
+      80%  { opacity: 1; }
+      100% { transform: translateY(110vh) rotate(720deg) scale(0.5); opacity: 0; }
+    }
+
+    /* ===== FLOATING PARTICLES ===== */
+    .particle {
+      position: fixed; border-radius: 50%; pointer-events: none; z-index: 5;
+      animation: particleFloat var(--dur) ease-in-out var(--delay) infinite alternate;
+    }
+    @keyframes particleFloat {
+      from { transform: translate(0, 0) scale(1); opacity: 0.4; }
+      to   { transform: translate(var(--dx), var(--dy)) scale(1.3); opacity: 0.9; }
+    }
+
+    /* ===== RESPONSIVE — MOBILE ===== */
+    @media (max-width: 480px) {
+      .corner-flag { font-size: 1.4rem; }
+      .corner-flag.tl { top: 14px; left: 8px; }
+      .corner-flag.tr { top: 14px; right: 8px; }
+      .corner-flag.bl { bottom: 8px; left: 8px; }
+      .corner-flag.br { bottom: 8px; right: 8px; }
+
+      .chest-wrapper { width: 160px; height: 160px; }
+      .chest-body    { left: 8px; width: 144px; height: 80px; }
+      .chest-body::before { top: 28px; }
+      .chest-body::after  { top: 34px; width: 28px; height: 20px; }
+      .chest-lid  { top: 40px; left: 8px; width: 144px; height: 44px; }
+      .chest-lid::before  { top: 12px; height: 10px; }
+      .chest-lid::after   { width: 32px; height: 11px; }
+      .chest-glow { left: 12px; width: 138px; height: 76px; }
+
+      .card-box { padding: 20px 18px; border-radius: 16px; max-height: 88vh; }
+      .card-emoji  { font-size: 2.4rem; }
+      .card-title  { font-size: 1.3rem; }
+      .card-name   { font-size: 1.9rem; }
+      .card-text   { font-size: 0.93rem; line-height: 1.75; }
+      .card-photos { gap: 8px; }
+      .card-photos img { border-radius: 10px; border-width: 2px; }
+      .card-flags  { font-size: 1.2rem; letter-spacing: 4px; }
+      .close-btn   { padding: 10px 24px; font-size: 0.95rem; }
+
+      .hint        { font-size: 0.9rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="flags-banner">
+    <div class="flag-it"><span></span><span></span><span></span></div>
+    <div class="flag-es"><span></span><span></span><span></span></div>
+  </div>
+
+  <div class="corner-flag tl">🇮🇹</div>
+  <div class="corner-flag tr">🇪🇸</div>
+  <div class="corner-flag bl">🇪🇸</div>
+  <div class="corner-flag br">🇮🇹</div>
+
+  <div class="stars" id="stars"></div>
+
+  <div class="scene">
+    <div class="hint" id="hint">✨ Clicca sul tesoro ✨</div>
+
+    <div class="chest-wrapper" id="chest" onclick="toggleChest()">
+      <div class="chest-glow" id="glow"></div>
+      <div class="chest-lid" id="lid"></div>
+      <div class="chest-body">
+        <div class="plank"></div>
+        <div class="plank"></div>
+        <div class="plank"></div>
+      </div>
+    </div>
+
+    <div class="reopen-hint" id="reopenHint">Clicca di nuovo per riaprire il tesoro 🔑</div>
+  </div>
+
+  <div class="message-card" id="msgCard">
+    <div class="card-backdrop" onclick="closeCard()"></div>
+    <div class="card-box">
+      <div class="dual-flags">
+        <div class="flag-bar it"><span></span><span></span><span></span></div>
+        <div class="flag-bar es"><span></span><span></span><span></span></div>
+      </div>
+      <span class="card-emoji">🎂</span>
+      <div class="card-title">Buon Compleanno</div>
+      <div class="card-name">Rafy! 🌟</div>
+      <div class="card-text">
+        Che questo giorno speciale ti porti<br>
+        tutto ciò che desideri nel cuore.<br><br>
+        Sei <em>meravigliosa</em>, piena di luce<br>
+        e di energia contagiosa. 🌸<br><br>
+        Che l'anno che inizia oggi sia<br>
+        il più <em>bello e magico</em> di tutti! ✨🥂
+      </div>
+      <div class="card-photos">
+        <img src="WhatsApp Image 2026-03-26 at 16.37.01.jpeg" alt="">
+        <img src="WhatsApp Image 2026-03-26 at 10.24.54.jpeg" alt="">
+      </div>
+      <span class="card-flags">🇮🇹 ❤️ 🇪🇸</span>
+      <div class="card-sign">Con tutto l'affetto del mondo</div>
+      <button class="close-btn" onclick="closeCard()">Grazie mille! 🎉</button>
+    </div>
+  </div>
+
+  <script>
+    const starsEl = document.getElementById('stars');
+    for (let i = 0; i < 120; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      const size = Math.random() * 3 + 1;
+      s.style.cssText = `width:${size}px;height:${size}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${(Math.random()*3+1).toFixed(1)}s;animation-delay:${(Math.random()*3).toFixed(1)}s;`;
+      starsEl.appendChild(s);
+    }
+
+    const pColors = ['#009246','#ffc400','#ce2b37','#c60b1e','#ffd700','#ffffff88'];
+    for (let i = 0; i < 22; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size = Math.random() * 8 + 4;
+      p.style.cssText = `width:${size}px;height:${size}px;background:${pColors[i%pColors.length]};top:${Math.random()*100}%;left:${Math.random()*100}%;--dur:${(Math.random()*4+2).toFixed(1)}s;--delay:${(Math.random()*3).toFixed(1)}s;--dx:${(Math.random()*40-20).toFixed(0)}px;--dy:${(Math.random()*40-20).toFixed(0)}px;opacity:0.3;`;
+      document.body.appendChild(p);
+    }
+
+    let isOpen = false;
+
+    function toggleChest() {
+      const chest  = document.getElementById('chest');
+      const lid    = document.getElementById('lid');
+      const glow   = document.getElementById('glow');
+      const hint   = document.getElementById('hint');
+      const reopen = document.getElementById('reopenHint');
+
+      chest.classList.add('toggling');
+      setTimeout(() => chest.classList.remove('toggling'), 800);
+
+      if (!isOpen) {
+        isOpen = true;
+        lid.classList.add('open');
+        glow.classList.add('lit');
+        hint.classList.add('hidden');
+        reopen.classList.remove('visible');
+        launchConfetti();
+        setTimeout(() => document.getElementById('msgCard').classList.add('visible'), 700);
+      } else {
+        isOpen = false;
+        lid.classList.remove('open');
+        glow.classList.remove('lit');
+        reopen.classList.add('visible');
+      }
+    }
+
+    function closeCard() {
+      document.getElementById('msgCard').classList.remove('visible');
+      document.getElementById('reopenHint').classList.add('visible');
+    }
+
+    function launchConfetti() {
+      const shapes = ['■','●','▲','★','♦'];
+      const cols = ['#009246','#ce2b37','#c60b1e','#ffc400','#ffd700','#ffffff','#ff4488'];
+      for (let i = 0; i < 100; i++) {
+        const c = document.createElement('div');
+        c.className = 'confetti-piece';
+        c.textContent = shapes[Math.floor(Math.random()*shapes.length)];
+        c.style.cssText = `left:${Math.random()*100}vw;top:-20px;color:${cols[Math.floor(Math.random()*cols.length)]};font-size:${Math.random()*14+8}px;--dur:${(Math.random()*3+2).toFixed(1)}s;--delay:${(Math.random()*1.5).toFixed(2)}s;`;
+        document.body.appendChild(c);
+        c.addEventListener('animationend', () => c.remove());
+      }
+    }
+  </script>
+</body>
+</html>
