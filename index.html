@@ -329,7 +329,12 @@
       from { transform: rotate(0deg); }
       to   { transform: rotate(360deg); }
     }
-    #yt-player { display: none; }
+    #yt-player {
+      position: fixed;
+      left: -9999px; top: -9999px;
+      width: 1px; height: 1px;
+      pointer-events: none;
+    }
 
     /* ===== RESPONSIVE — MOBILE ===== */
     @media (max-width: 480px) {
@@ -439,8 +444,8 @@
     function onYouTubeIframeAPIReady() {
       ytPlayer = new YT.Player('yt-player', {
         height: '1', width: '1',
-        videoId: 'dQqCOdBEOFc', // Vivo per Lei - Andrea Bocelli
-        playerVars: { autoplay: 0, controls: 0, loop: 1, playlist: 'dQqCOdBEOFc' },
+        videoId: 'CNHL66K8S2I', // Vivo per Lei - Andrea Bocelli
+        playerVars: { autoplay: 0, controls: 0, loop: 1, playlist: 'CNHL66K8S2I' },
         events: { onReady: () => { ytReady = true; } }
       });
     }
