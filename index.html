@@ -329,12 +329,11 @@
       from { transform: rotate(0deg); }
       to   { transform: rotate(360deg); }
     }
-    #yt-frame {
+    #yt-player {
       position: fixed;
       left: -9999px; top: 0;
-      width: 200px; height: 1px;
+      width: 320px; height: 180px;
       pointer-events: none;
-      opacity: 0;
     }
 
     /* ===== RESPONSIVE — MOBILE ===== */
@@ -381,13 +380,8 @@
   <div class="corner-flag bl">🇪🇸</div>
   <div class="corner-flag br">🇮🇹</div>
 
-  <!-- YouTube player iframe (off-screen but rendered) -->
-  <iframe id="yt-frame"
-    src="https://www.youtube.com/embed/CNHL66K8S2I?enablejsapi=1&controls=0&loop=1&playlist=CNHL66K8S2I"
-    allow="autoplay; encrypted-media"
-    allowfullscreen
-    frameborder="0">
-  </iframe>
+  <!-- YouTube player container (off-screen) -->
+  <div id="yt-player"></div>
 
   <!-- Music button -->
   <button class="music-btn" id="musicBtn" onclick="toggleMusic()">
@@ -442,26 +436,41 @@
   </div>
 
   <script>
-    // ===== MUSIC via postMessage =====
-    let isPlaying = false;
+    // ===== MUSIC — YouTube IFrame API =====
+    var ytPlayer, ytReady = false, pendingPlay = false, isPlaying = false;
 
-    function ytCmd(func) {
-      const frame = document.getElementById('yt-frame');
-      frame.contentWindow.postMessage(
-        JSON.stringify({ event: 'command', func: func, args: [] }), '*'
-      );
+    // Load API
+    var tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(tag);
+
+    // Called automatically by the API once loaded
+    function onYouTubeIframeAPIReady() {
+      ytPlayer = new YT.Player('yt-player', {
+        width: '320', height: '180',
+        videoId: 'CNHL66K8S2I',
+        playerVars: { autoplay: 0, controls: 0, loop: 1, playlist: 'CNHL66K8S2I' },
+        events: {
+          onReady: function() {
+            ytReady = true;
+            if (pendingPlay) { ytPlayer.playVideo(); pendingPlay = false; }
+          }
+        }
+      });
     }
 
     function toggleMusic() {
       const btn   = document.getElementById('musicBtn');
       const label = document.getElementById('musicLabel');
       if (!isPlaying) {
-        ytCmd('playVideo');
+        if (ytReady) { ytPlayer.playVideo(); }
+        else { pendingPlay = true; }
         isPlaying = true;
         btn.classList.add('playing');
         label.textContent = 'Pausa ♫';
       } else {
-        ytCmd('pauseVideo');
+        if (ytReady) { ytPlayer.pauseVideo(); }
+        pendingPlay = false;
         isPlaying = false;
         btn.classList.remove('playing');
         label.textContent = 'Vivo per Lei';
