@@ -4,371 +4,434 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Buon Compleanno Rafy! 🎂</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
+    /* ===== BACKGROUND ===== */
     body {
-      background: #0a0a1a;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Georgia', serif;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      font-family: 'Lato', sans-serif;
       overflow: hidden;
       cursor: default;
+      background: #06050f;
+    }
+
+    /* Animated nebula bg */
+    .bg-gradient {
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 30%, #1a0533aa 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 70%, #0a1a3a99 0%, transparent 60%),
+        radial-gradient(ellipse 100% 80% at 50% 50%, #0d0820 0%, #06050f 100%);
+      animation: nebula 12s ease-in-out infinite alternate;
+    }
+    @keyframes nebula {
+      0%   { filter: hue-rotate(0deg) brightness(1); }
+      50%  { filter: hue-rotate(15deg) brightness(1.15); }
+      100% { filter: hue-rotate(-10deg) brightness(0.95); }
     }
 
     /* ===== STARS ===== */
-    .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+    .stars { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
     .star {
-      position: absolute; background: white; border-radius: 50%;
+      position: absolute; border-radius: 50%; background: #fff;
       animation: twinkle var(--d) ease-in-out infinite alternate;
     }
     @keyframes twinkle {
-      from { opacity: 0.2; transform: scale(1); }
-      to   { opacity: 1;   transform: scale(1.4); }
+      from { opacity: 0.1; transform: scale(0.8); }
+      to   { opacity: 0.9; transform: scale(1.3); }
     }
 
-    /* ===== FLAG BANNERS (top) ===== */
+    /* ===== FLAG BANNER TOP ===== */
     .flags-banner {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      height: 10px;
-      display: flex;
-      z-index: 50;
+      position: fixed; top: 0; left: 0; right: 0;
+      height: 5px; display: flex; z-index: 100;
     }
     .flag-it, .flag-es { flex: 1; display: flex; }
     .flag-it span:nth-child(1) { flex:1; background:#009246; }
-    .flag-it span:nth-child(2) { flex:1; background:#ffffff; }
+    .flag-it span:nth-child(2) { flex:1; background:#fff; }
     .flag-it span:nth-child(3) { flex:1; background:#ce2b37; }
     .flag-es span:nth-child(1) { flex:1; background:#c60b1e; }
     .flag-es span:nth-child(2) { flex:2; background:#ffc400; }
     .flag-es span:nth-child(3) { flex:1; background:#c60b1e; }
 
-    /* ===== FLAG CORNERS ===== */
+    /* ===== CORNER FLAGS ===== */
     .corner-flag {
-      position: fixed; z-index: 50;
-      font-size: 2rem; line-height: 1;
-      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.6));
-      animation: flagFloat 3s ease-in-out infinite alternate;
+      position: fixed; z-index: 90;
+      font-size: 1.8rem; line-height: 1;
+      filter: drop-shadow(0 2px 10px #0008);
+      animation: flagFloat 4s ease-in-out infinite alternate;
+      user-select: none;
     }
-    .corner-flag.tl { top: 16px; left: 14px; animation-delay: 0s; }
-    .corner-flag.tr { top: 16px; right: 14px; animation-delay: 0.7s; }
-    .corner-flag.bl { bottom: 14px; left: 14px; animation-delay: 1.4s; }
-    .corner-flag.br { bottom: 14px; right: 14px; animation-delay: 2.1s; }
+    .corner-flag.tl { top: 18px; left: 16px; }
+    .corner-flag.tr { top: 18px; right: 16px; animation-delay: 1s; }
+    .corner-flag.bl { bottom: 70px; left: 16px; animation-delay: 2s; }
+    .corner-flag.br { bottom: 70px; right: 16px; animation-delay: 3s; }
     @keyframes flagFloat {
-      from { transform: translateY(0) rotate(-3deg); }
-      to   { transform: translateY(-8px) rotate(3deg); }
+      from { transform: translateY(0) rotate(-4deg) scale(1); }
+      to   { transform: translateY(-10px) rotate(4deg) scale(1.1); }
     }
 
     /* ===== SCENE ===== */
     .scene {
       position: relative; z-index: 10;
       display: flex; flex-direction: column;
-      align-items: center; gap: 20px;
+      align-items: center; gap: 18px;
+    }
+
+    /* Subtitle above chest */
+    .subtitle {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      color: #c9a0ff;
+      font-size: 1rem;
+      letter-spacing: 2px;
+      opacity: 0.8;
+      text-align: center;
     }
 
     .hint {
-      color: #ffd700; font-size: 1rem;
-      letter-spacing: 2px;
-      animation: pulse 1.5s ease-in-out infinite;
-      text-shadow: 0 0 10px #ffd70088;
-      transition: opacity 0.4s;
-      text-align: center; padding: 0 20px;
+      font-family: 'Lato', sans-serif;
+      color: #ffd700; font-size: 0.9rem;
+      font-weight: 300; letter-spacing: 3px; text-transform: uppercase;
+      animation: pulse 2s ease-in-out infinite;
+      text-shadow: 0 0 12px #ffd700aa;
+      transition: opacity 0.5s;
+      text-align: center;
     }
     .hint.hidden { opacity: 0; pointer-events: none; }
-
     .reopen-hint {
-      color: #aaaacc; font-size: 0.82rem;
-      letter-spacing: 1px; opacity: 0;
-      transition: opacity 0.4s; text-align: center;
-      padding: 0 20px;
+      color: #6655aa; font-size: 0.78rem; letter-spacing: 2px;
+      opacity: 0; transition: opacity 0.5s; text-align: center;
     }
-    .reopen-hint.visible { opacity: 0.7; }
-
-    @keyframes pulse {
-      0%,100% { opacity: 0.6; }
-      50%      { opacity: 1; }
-    }
+    .reopen-hint.visible { opacity: 1; }
+    @keyframes pulse { 0%,100%{opacity:.5} 50%{opacity:1} }
 
     /* ===== CHEST ===== */
     .chest-wrapper {
-      position: relative;
-      width: 200px; height: 200px;
-      cursor: pointer;
-      filter: drop-shadow(0 0 20px #ffd70066);
+      position: relative; width: 200px; height: 210px;
+      cursor: pointer; perspective: 700px;
+      filter: drop-shadow(0 0 22px #ffd70055);
       transition: filter 0.3s;
-      perspective: 600px;
     }
-    .chest-wrapper:hover { filter: drop-shadow(0 0 35px #ffd700cc); }
-    .chest-wrapper:hover .chest-body,
-    .chest-wrapper:hover .chest-lid { background: #8B5E1A; }
+    .chest-wrapper:hover { filter: drop-shadow(0 0 40px #ffd700bb); }
+
+    /* Ground shadow */
+    .chest-shadow {
+      position: absolute; bottom: -6px; left: 50%;
+      transform: translateX(-50%);
+      width: 150px; height: 14px;
+      background: radial-gradient(ellipse, #ffd70033 0%, transparent 70%);
+      border-radius: 50%;
+    }
 
     .chest-body {
-      position: absolute; bottom: 0; left: 10px;
+      position: absolute; bottom: 8px; left: 10px;
       width: 180px; height: 100px;
-      background: #7a4f15;
-      border-radius: 0 0 12px 12px;
-      border: 4px solid #5a3509;
+      background: linear-gradient(160deg, #9a6520 0%, #6b3c0e 100%);
+      border-radius: 0 0 14px 14px;
+      border: 3px solid #4a2a06;
       transition: background 0.3s;
+      box-shadow: inset 0 -6px 12px #00000055, inset 0 4px 8px #ffffff22;
     }
     .chest-body::before {
       content: ''; position: absolute;
-      top: 35px; left: -4px;
-      width: calc(100% + 8px); height: 20px;
-      background: #5a3509;
+      top: 34px; left: -3px;
+      width: calc(100% + 6px); height: 18px;
+      background: #4a2a06;
+      box-shadow: 0 2px 6px #00000055;
     }
+    /* Lock */
     .chest-body::after {
-      content: ''; position: absolute;
-      top: 42px; left: 50%;
-      transform: translateX(-50%);
-      width: 36px; height: 26px;
-      background: #ffd700; border-radius: 4px;
-      border: 3px solid #b8860b;
-      box-shadow: 0 0 8px #ffd70099;
+      content: '🔒'; position: absolute;
+      top: 38px; left: 50%; transform: translateX(-50%);
+      font-size: 1.1rem; line-height: 1;
+      filter: drop-shadow(0 0 6px #ffd700);
     }
-    .plank { position: absolute; width: 6px; height: 100%; background: #5a3509; top: 0; }
+    .plank { position: absolute; width: 5px; height: 100%; background: #4a2a06; top: 0; opacity: 0.6; }
     .plank:nth-child(1) { left: 20%; }
     .plank:nth-child(2) { left: 48%; }
     .plank:nth-child(3) { left: 76%; }
 
     .chest-lid {
-      position: absolute; top: 50px; left: 10px;
-      width: 180px; height: 55px;
-      background: #7a4f15;
+      position: absolute; top: 48px; left: 10px;
+      width: 180px; height: 58px;
+      background: linear-gradient(160deg, #b07828 0%, #7a4a12 100%);
       border-radius: 14px 14px 0 0;
-      border: 4px solid #5a3509;
+      border: 3px solid #4a2a06;
       transform-origin: bottom center;
-      transition: transform 0.7s cubic-bezier(0.25, 1.5, 0.5, 1), background 0.3s;
+      transition: transform 0.8s cubic-bezier(0.2, 1.6, 0.5, 1), box-shadow 0.3s;
+      box-shadow: inset 0 4px 10px #ffffff22, 0 -4px 8px #00000044;
     }
     .chest-lid::before {
       content: ''; position: absolute;
-      top: 15px; left: -4px;
-      width: calc(100% + 8px); height: 14px;
-      background: #5a3509;
+      top: 18px; left: -3px;
+      width: calc(100% + 6px); height: 12px;
+      background: #4a2a06; opacity: 0.8;
     }
-    .chest-lid::after {
-      content: ''; position: absolute;
-      bottom: -2px; left: 50%;
-      transform: translateX(-50%);
-      width: 40px; height: 14px;
-      background: #b8860b; border-radius: 4px 4px 0 0;
-    }
-    .chest-lid.open { transform: rotateX(-120deg); }
+    .chest-lid.open { transform: rotateX(-125deg); }
 
     .chest-glow {
-      position: absolute; bottom: 4px; left: 14px;
+      position: absolute; bottom: 12px; left: 14px;
       width: 172px; height: 96px;
-      border-radius: 0 0 8px 8px;
-      background: radial-gradient(ellipse at 50% 100%, #ffd70000, #ffd70000);
-      transition: background 0.6s 0.2s; pointer-events: none;
+      border-radius: 0 0 10px 10px;
+      background: transparent;
+      transition: background 0.7s 0.3s; pointer-events: none;
     }
     .chest-glow.lit {
-      background: radial-gradient(ellipse at 50% 100%, #ffd700aa 0%, #ff8c0066 60%, transparent 100%);
+      background: radial-gradient(ellipse at 50% 80%, #ffd700cc 0%, #ff880055 50%, transparent 75%);
     }
 
-    .chest-wrapper:not(.toggling):hover { animation: jiggle 0.5s ease-in-out; }
+    .chest-wrapper:not(.toggling):hover { animation: jiggle 0.6s ease-in-out; }
     @keyframes jiggle {
-      0%,100% { transform: rotate(0deg); }
-      25%      { transform: rotate(-3deg); }
-      75%      { transform: rotate(3deg); }
+      0%,100%{ transform:rotate(0deg) } 20%{ transform:rotate(-3deg) } 60%{ transform:rotate(3deg) }
     }
 
-    /* ===== MESSAGE CARD ===== */
+    /* ===== OVERLAY ===== */
     .message-card {
       position: fixed; inset: 0;
       display: flex; align-items: center; justify-content: center;
-      z-index: 100;
-      opacity: 0; pointer-events: none;
-      transition: opacity 0.5s;
+      z-index: 200; opacity: 0; pointer-events: none;
+      transition: opacity 0.6s;
       padding: 16px;
     }
     .message-card.visible { opacity: 1; pointer-events: auto; }
 
     .card-backdrop {
       position: absolute; inset: 0;
-      background: rgba(0,0,0,0.65);
-      backdrop-filter: blur(4px);
+      background: rgba(4, 2, 18, 0.8);
+      backdrop-filter: blur(8px);
     }
 
+    /* ===== CARD ===== */
     .card-box {
       position: relative; z-index: 10;
-      background: linear-gradient(135deg, #1a0a2e 0%, #2a0a1e 100%);
-      border: 3px solid #ffd700;
-      border-radius: 20px;
-      padding: 28px 32px;
-      max-width: 540px; width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
+      width: 100%; max-width: 520px;
+      max-height: 92vh; overflow-y: auto;
+      background: linear-gradient(160deg, #160828 0%, #0e0520 50%, #130818 100%);
+      border-radius: 24px;
+      padding: 32px 36px 28px;
       text-align: center;
-      box-shadow: 0 0 60px #ffd70044, 0 0 120px #ffd70022, inset 0 0 30px #ffffff08;
-      transform: scale(0.6) translateY(40px);
-      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s;
-      /* scrollbar styling */
-      scrollbar-width: thin;
-      scrollbar-color: #ffd70066 transparent;
+      /* glowing border via outline trick */
+      box-shadow:
+        0 0 0 1px #ffd70055,
+        0 0 0 2px #9966ff33,
+        0 0 40px #ffd70033,
+        0 0 80px #7733ff22,
+        inset 0 0 40px #ffffff05;
+      transform: scale(0.7) translateY(50px);
+      transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s;
+      scrollbar-width: thin; scrollbar-color: #ffd70044 transparent;
     }
-    .card-box::-webkit-scrollbar { width: 4px; }
-    .card-box::-webkit-scrollbar-thumb { background: #ffd70066; border-radius: 2px; }
+    .card-box::-webkit-scrollbar { width: 3px; }
+    .card-box::-webkit-scrollbar-thumb { background: #ffd70055; border-radius: 2px; }
     .message-card.visible .card-box { transform: scale(1) translateY(0); }
 
-    /* Dual flag stripe */
-    .dual-flags { display: flex; gap: 8px; margin-bottom: 20px; }
-    .flag-bar { flex: 1; height: 8px; border-radius: 4px; overflow: hidden; display: flex; }
+    /* Dual flag bar */
+    .dual-flags { display: flex; gap: 10px; margin-bottom: 22px; }
+    .flag-bar { flex: 1; height: 5px; border-radius: 3px; overflow: hidden; display: flex; }
     .flag-bar span { flex: 1; }
     .flag-bar.it span:nth-child(1) { background: #009246; }
-    .flag-bar.it span:nth-child(2) { background: #ffffff; }
+    .flag-bar.it span:nth-child(2) { background: #e8e8e8; }
     .flag-bar.it span:nth-child(3) { background: #ce2b37; }
     .flag-bar.es span:nth-child(1) { background: #c60b1e; }
     .flag-bar.es span:nth-child(2) { flex: 2; background: #ffc400; }
     .flag-bar.es span:nth-child(3) { background: #c60b1e; }
 
     .card-emoji {
-      font-size: 3rem;
-      animation: floatEmoji 2.5s ease-in-out infinite;
-      display: block; margin-bottom: 12px;
+      font-size: 3.2rem; display: block; margin-bottom: 10px;
+      animation: floatEmoji 3s ease-in-out infinite;
     }
-    @keyframes floatEmoji {
-      0%,100% { transform: translateY(0); }
-      50%      { transform: translateY(-10px); }
-    }
+    @keyframes floatEmoji { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
 
-    .card-title { font-size: 1.7rem; color: #ffd700; text-shadow: 0 0 20px #ffd700; margin-bottom: 8px; letter-spacing: 2px; }
-    .card-name  { font-size: 2.4rem; color: #fff; font-weight: bold; margin-bottom: 18px; animation: nameGlow 2s ease-in-out infinite alternate; }
+    .card-title {
+      font-family: 'Lato', sans-serif;
+      font-weight: 300; font-size: 0.85rem;
+      text-transform: uppercase; letter-spacing: 5px;
+      color: #b899ff; margin-bottom: 6px;
+    }
+    .card-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem; font-weight: 700;
+      color: #fff; margin-bottom: 20px; line-height: 1.1;
+      animation: nameGlow 3s ease-in-out infinite alternate;
+    }
     @keyframes nameGlow {
-      from { text-shadow: 0 0 20px #ff88aa88; }
-      to   { text-shadow: 0 0 40px #ff88aaff, 0 0 60px #ff44aaaa; }
+      from { text-shadow: 0 0 20px #ff88aa66; }
+      to   { text-shadow: 0 0 50px #ff88aaff, 0 0 90px #ff44aa88; }
     }
 
-    .card-text { color: #e0d0ff; font-size: 1rem; line-height: 1.9; margin-bottom: 18px; }
-    .card-text em { color: #ffd700; font-style: normal; }
+    .divider {
+      width: 60px; height: 2px; margin: 0 auto 20px;
+      background: linear-gradient(90deg, transparent, #ffd700, transparent);
+    }
 
-    /* Photo gallery */
-    .card-photos { display: flex; gap: 10px; margin: 16px 0; justify-content: center; }
-    .card-photos img {
-      width: 48%; max-height: 220px; object-fit: cover;
-      border-radius: 12px; border: 3px solid #ffd700;
-      box-shadow: 0 0 20px #ffd70066;
+    .card-text {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      color: #cbbcee; font-size: 1rem; line-height: 2;
+      margin-bottom: 22px;
+    }
+    .card-text em {
+      font-style: normal; color: #ffd700;
+      font-family: 'Playfair Display', serif; font-weight: 700;
+    }
+
+    /* Polaroid photos */
+    .card-photos {
+      display: flex; gap: 14px;
+      margin: 22px 0; justify-content: center;
+    }
+    .polaroid {
+      flex: 1; max-width: 48%;
+      background: #fff;
+      padding: 8px 8px 28px;
+      border-radius: 3px;
+      box-shadow: 0 8px 30px #00000077, 0 0 0 1px #ffffff11;
+      transform: rotate(var(--r));
       transition: transform 0.3s, box-shadow 0.3s;
     }
-    .card-photos img:hover { transform: scale(1.04); box-shadow: 0 0 35px #ffd700cc; }
+    .polaroid:nth-child(1) { --r: -2.5deg; }
+    .polaroid:nth-child(2) { --r: 2deg; }
+    .polaroid:hover { transform: rotate(0deg) scale(1.04); box-shadow: 0 12px 40px #00000099; }
+    .polaroid img {
+      width: 100%; height: 160px;
+      object-fit: cover; display: block;
+    }
 
-    .card-flags { font-size: 1.5rem; letter-spacing: 6px; margin-bottom: 14px; display: block; color: #ffffff; }
-    .card-sign  { color: #9999bb; font-size: 0.86rem; letter-spacing: 1px; margin-top: 4px; }
+    .card-flags {
+      font-size: 1.6rem; letter-spacing: 8px;
+      display: block; color: #fff; margin-bottom: 14px;
+    }
+    .card-sign {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      color: #7766aa; font-size: 0.9rem; margin-top: 4px;
+    }
 
     .close-btn {
-      margin-top: 20px; padding: 12px 32px;
-      background: linear-gradient(90deg, #009246, #ffffff 50%, #ce2b37);
-      border: none; border-radius: 50px;
-      font-size: 1rem; font-weight: bold;
-      cursor: pointer; color: #1a0a00; letter-spacing: 1px;
-      transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 20px #ffd70066;
+      margin-top: 22px; padding: 13px 36px;
+      background: transparent;
+      border: 1.5px solid #ffd700;
+      border-radius: 50px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.85rem; font-weight: 400;
+      text-transform: uppercase; letter-spacing: 3px;
+      cursor: pointer; color: #ffd700;
+      transition: background 0.3s, color 0.3s, transform 0.2s, box-shadow 0.3s;
+      box-shadow: 0 0 16px #ffd70033;
     }
-    .close-btn:hover { transform: scale(1.07); box-shadow: 0 6px 30px #ffd700aa; }
+    .close-btn:hover {
+      background: #ffd700; color: #06050f;
+      transform: scale(1.04); box-shadow: 0 0 30px #ffd70077;
+    }
 
     /* ===== CONFETTI ===== */
     .confetti-piece {
-      position: fixed; opacity: 0; z-index: 99; pointer-events: none;
+      position: fixed; opacity: 0; z-index: 300; pointer-events: none;
       animation: confettiFall var(--dur) ease-in var(--delay) forwards;
     }
     @keyframes confettiFall {
-      0%   { transform: translateY(-20px) rotate(0deg) scale(1); opacity: 1; }
-      80%  { opacity: 1; }
-      100% { transform: translateY(110vh) rotate(720deg) scale(0.5); opacity: 0; }
+      0%  { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+      85% { opacity: 1; }
+      100%{ transform: translateY(110vh) rotate(800deg) scale(0.4); opacity: 0; }
     }
 
     /* ===== FLOATING PARTICLES ===== */
     .particle {
-      position: fixed; border-radius: 50%; pointer-events: none; z-index: 5;
-      animation: particleFloat var(--dur) ease-in-out var(--delay) infinite alternate;
+      position: fixed; border-radius: 50%; pointer-events: none; z-index: 2;
+      animation: pFloat var(--dur) ease-in-out var(--delay) infinite alternate;
     }
-    @keyframes particleFloat {
-      from { transform: translate(0, 0) scale(1); opacity: 0.4; }
-      to   { transform: translate(var(--dx), var(--dy)) scale(1.3); opacity: 0.9; }
+    @keyframes pFloat {
+      from { transform: translate(0,0) scale(1); opacity: 0.3; }
+      to   { transform: translate(var(--dx),var(--dy)) scale(1.4); opacity: 0.7; }
     }
 
     /* ===== MUSIC BUTTON ===== */
     .music-btn {
-      position: fixed;
-      bottom: 22px;
-      left: 50%;
+      position: fixed; bottom: 20px; left: 50%;
       transform: translateX(-50%);
-      z-index: 60;
-      background: linear-gradient(135deg, #1a0a2e, #2a0a1e);
-      border: 2px solid #ffd700;
+      z-index: 80;
+      background: rgba(12, 8, 30, 0.9);
+      border: 1px solid #ffd70066;
       border-radius: 50px;
-      padding: 10px 22px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      padding: 10px 20px 10px 16px;
+      display: flex; align-items: center; gap: 10px;
       cursor: pointer;
-      box-shadow: 0 0 20px #ffd70055;
-      transition: box-shadow 0.3s, transform 0.2s;
+      box-shadow: 0 0 20px #ffd70022, 0 4px 20px #00000066;
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.2s;
       color: #ffd700;
-      font-family: 'Georgia', serif;
-      font-size: 0.9rem;
-      letter-spacing: 1px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.78rem; font-weight: 300;
+      letter-spacing: 2px; text-transform: uppercase;
       white-space: nowrap;
+      backdrop-filter: blur(10px);
     }
     .music-btn:hover {
-      box-shadow: 0 0 35px #ffd700aa;
-      transform: translateX(-50%) scale(1.05);
+      border-color: #ffd700;
+      box-shadow: 0 0 30px #ffd70055;
+      transform: translateX(-50%) scale(1.04);
     }
-    .music-btn .note {
-      font-size: 1.2rem;
-      animation: noteBounce 1.2s ease-in-out infinite;
+
+    /* Waveform bars */
+    .waveform { display: flex; align-items: center; gap: 2px; height: 18px; }
+    .waveform .bar {
+      width: 3px; border-radius: 2px;
+      background: #ffd700;
+      height: 5px;
+      transition: height 0.1s;
     }
-    .music-btn.playing .note { animation: noteSpin 0.8s linear infinite; }
-    @keyframes noteBounce {
-      0%,100% { transform: translateY(0); }
-      50%      { transform: translateY(-4px); }
+    .music-btn.playing .bar { animation: wave var(--s) ease-in-out infinite alternate; }
+    .waveform .bar:nth-child(1){--s:0.4s; height:8px}
+    .waveform .bar:nth-child(2){--s:0.6s; height:14px}
+    .waveform .bar:nth-child(3){--s:0.35s; height:10px}
+    .waveform .bar:nth-child(4){--s:0.5s; height:16px}
+    .waveform .bar:nth-child(5){--s:0.45s; height:6px}
+    @keyframes wave {
+      from { transform: scaleY(0.3); }
+      to   { transform: scaleY(1); }
     }
-    @keyframes noteSpin {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
-    }
+
     #yt-player {
-      position: fixed;
-      left: -9999px; top: 0;
-      width: 320px; height: 180px;
-      pointer-events: none;
+      position: fixed; left: -9999px; top: 0;
+      width: 320px; height: 180px; pointer-events: none;
     }
 
-    /* ===== RESPONSIVE — MOBILE ===== */
+    /* ===== RESPONSIVE ===== */
     @media (max-width: 480px) {
-      .corner-flag { font-size: 1.4rem; }
-      .corner-flag.tl { top: 14px; left: 8px; }
-      .corner-flag.tr { top: 14px; right: 8px; }
-      .corner-flag.bl { bottom: 8px; left: 8px; }
-      .corner-flag.br { bottom: 8px; right: 8px; }
+      .corner-flag { font-size: 1.3rem; }
+      .corner-flag.tl { top: 14px; left: 10px; }
+      .corner-flag.tr { top: 14px; right: 10px; }
+      .corner-flag.bl { bottom: 62px; left: 10px; }
+      .corner-flag.br { bottom: 62px; right: 10px; }
 
-      .chest-wrapper { width: 160px; height: 160px; }
-      .chest-body    { left: 8px; width: 144px; height: 80px; }
-      .chest-body::before { top: 28px; }
-      .chest-body::after  { top: 34px; width: 28px; height: 20px; }
-      .chest-lid  { top: 40px; left: 8px; width: 144px; height: 44px; }
-      .chest-lid::before  { top: 12px; height: 10px; }
-      .chest-lid::after   { width: 32px; height: 11px; }
+      .chest-wrapper { width: 160px; height: 170px; }
+      .chest-body { left: 8px; width: 144px; height: 80px; }
+      .chest-body::before { top: 28px; height: 14px; }
+      .chest-lid { top: 40px; left: 8px; width: 144px; height: 46px; }
+      .chest-lid::before { top: 15px; height: 10px; }
       .chest-glow { left: 12px; width: 138px; height: 76px; }
 
-      .card-box { padding: 20px 18px; border-radius: 16px; max-height: 88vh; }
-      .card-emoji  { font-size: 2.4rem; }
-      .card-title  { font-size: 1.3rem; }
-      .card-name   { font-size: 1.9rem; }
-      .card-text   { font-size: 0.93rem; line-height: 1.75; }
-      .card-photos { gap: 8px; }
-      .card-photos img { border-radius: 10px; border-width: 2px; }
-      .card-flags  { font-size: 1.2rem; letter-spacing: 4px; }
-      .close-btn   { padding: 10px 24px; font-size: 0.95rem; }
-
-      .hint        { font-size: 0.9rem; }
-      .music-btn   { bottom: 14px; padding: 9px 18px; font-size: 0.82rem; }
+      .card-box { padding: 22px 18px 20px; border-radius: 18px; max-height: 88vh; }
+      .card-emoji { font-size: 2.6rem; }
+      .card-name  { font-size: 2.2rem; }
+      .card-text  { font-size: 0.92rem; line-height: 1.85; }
+      .polaroid img { height: 120px; }
+      .polaroid { padding: 6px 6px 22px; }
+      .card-flags { font-size: 1.3rem; letter-spacing: 5px; }
+      .close-btn { padding: 11px 28px; font-size: 0.78rem; }
+      .music-btn { bottom: 14px; padding: 9px 16px 9px 13px; font-size: 0.72rem; }
+      .subtitle { font-size: 0.88rem; }
     }
   </style>
 </head>
 <body>
+
+  <div class="bg-gradient"></div>
 
   <div class="flags-banner">
     <div class="flag-it"><span></span><span></span><span></span></div>
@@ -380,21 +443,25 @@
   <div class="corner-flag bl">🇪🇸</div>
   <div class="corner-flag br">🇮🇹</div>
 
-  <!-- YouTube player container (off-screen) -->
   <div id="yt-player"></div>
 
   <!-- Music button -->
   <button class="music-btn" id="musicBtn" onclick="toggleMusic()">
-    <span class="note">♪</span>
+    <div class="waveform">
+      <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+      <div class="bar"></div><div class="bar"></div>
+    </div>
     <span id="musicLabel">Vivo per Lei</span>
   </button>
 
   <div class="stars" id="stars"></div>
 
   <div class="scene">
-    <div class="hint" id="hint">✨ Clicca sul tesoro ✨</div>
+    <p class="subtitle">Un regalo speciale per te…</p>
+    <div class="hint" id="hint">✦ Clicca sul tesoro ✦</div>
 
     <div class="chest-wrapper" id="chest" onclick="toggleChest()">
+      <div class="chest-shadow"></div>
       <div class="chest-glow" id="glow"></div>
       <div class="chest-lid" id="lid"></div>
       <div class="chest-body">
@@ -404,9 +471,10 @@
       </div>
     </div>
 
-    <div class="reopen-hint" id="reopenHint">Clicca di nuovo per riaprire il tesoro 🔑</div>
+    <div class="reopen-hint" id="reopenHint">Clicca di nuovo per riaprire 🔑</div>
   </div>
 
+  <!-- Message card -->
   <div class="message-card" id="msgCard">
     <div class="card-backdrop" onclick="closeCard()"></div>
     <div class="card-box">
@@ -415,36 +483,38 @@
         <div class="flag-bar es"><span></span><span></span><span></span></div>
       </div>
       <span class="card-emoji">🎂</span>
-      <div class="card-title">Buon Compleanno</div>
-      <div class="card-name">Rafy! 🌟</div>
-      <div class="card-text">
+      <p class="card-title">Buon Compleanno</p>
+      <h1 class="card-name">Rafy</h1>
+      <div class="divider"></div>
+      <p class="card-text">
         Che questo giorno speciale ti porti<br>
         tutto ciò che desideri nel cuore.<br><br>
         Sei <em>meravigliosa</em>, piena di luce<br>
         e di energia contagiosa. 🌸<br><br>
         Che l'anno che inizia oggi sia<br>
         il più <em>bello e magico</em> di tutti! ✨🥂
-      </div>
+      </p>
       <div class="card-photos">
-        <img src="WhatsApp Image 2026-03-26 at 16.37.01.jpeg" alt="">
-        <img src="WhatsApp Image 2026-03-26 at 10.24.54.jpeg" alt="">
+        <div class="polaroid">
+          <img src="WhatsApp Image 2026-03-26 at 16.37.01.jpeg" alt="">
+        </div>
+        <div class="polaroid">
+          <img src="WhatsApp Image 2026-03-26 at 10.24.54.jpeg" alt="">
+        </div>
       </div>
       <span class="card-flags">🇮🇹 ❤️ 🇪🇸</span>
-      <div class="card-sign">Con tutto l'affetto del mondo</div>
-      <button class="close-btn" onclick="closeCard()">Grazie mille! 🎉</button>
+      <p class="card-sign">Con tutto l'affetto del mondo</p>
+      <button class="close-btn" onclick="closeCard()">Grazie mille ✦</button>
     </div>
   </div>
 
+  <!-- YouTube IFrame API -->
   <script>
-    // ===== MUSIC — YouTube IFrame API =====
     var ytPlayer, ytReady = false, pendingPlay = false, isPlaying = false;
-
-    // Load API
     var tag = document.createElement('script');
     tag.src = 'https://www.youtube.com/iframe_api';
     document.head.appendChild(tag);
 
-    // Called automatically by the API once loaded
     function onYouTubeIframeAPIReady() {
       ytPlayer = new YT.Player('yt-player', {
         width: '320', height: '180',
@@ -460,40 +530,40 @@
     }
 
     function toggleMusic() {
-      const btn   = document.getElementById('musicBtn');
-      const label = document.getElementById('musicLabel');
+      const btn = document.getElementById('musicBtn');
+      const lbl = document.getElementById('musicLabel');
       if (!isPlaying) {
-        if (ytReady) { ytPlayer.playVideo(); }
-        else { pendingPlay = true; }
+        ytReady ? ytPlayer.playVideo() : (pendingPlay = true);
         isPlaying = true;
         btn.classList.add('playing');
-        label.textContent = 'Pausa ♫';
+        lbl.textContent = 'Pausa';
       } else {
-        if (ytReady) { ytPlayer.pauseVideo(); }
-        pendingPlay = false;
-        isPlaying = false;
+        ytReady && ytPlayer.pauseVideo();
+        pendingPlay = false; isPlaying = false;
         btn.classList.remove('playing');
-        label.textContent = 'Vivo per Lei';
+        lbl.textContent = 'Vivo per Lei';
       }
     }
   </script>
 
   <script>
+    // Stars
     const starsEl = document.getElementById('stars');
-    for (let i = 0; i < 120; i++) {
+    for (let i = 0; i < 140; i++) {
       const s = document.createElement('div');
       s.className = 'star';
-      const size = Math.random() * 3 + 1;
-      s.style.cssText = `width:${size}px;height:${size}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${(Math.random()*3+1).toFixed(1)}s;animation-delay:${(Math.random()*3).toFixed(1)}s;`;
+      const sz = Math.random() * 2.5 + 0.5;
+      s.style.cssText = `width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${(Math.random()*4+1).toFixed(1)}s;animation-delay:${(Math.random()*4).toFixed(1)}s;`;
       starsEl.appendChild(s);
     }
 
-    const pColors = ['#009246','#ffc400','#ce2b37','#c60b1e','#ffd700','#ffffff88'];
-    for (let i = 0; i < 22; i++) {
+    // Particles — IT+ES palette
+    const pcols = ['#009246cc','#ffc400cc','#ce2b37cc','#c60b1ecc','#ffd700cc','#aa88ffcc'];
+    for (let i = 0; i < 18; i++) {
       const p = document.createElement('div');
       p.className = 'particle';
-      const size = Math.random() * 8 + 4;
-      p.style.cssText = `width:${size}px;height:${size}px;background:${pColors[i%pColors.length]};top:${Math.random()*100}%;left:${Math.random()*100}%;--dur:${(Math.random()*4+2).toFixed(1)}s;--delay:${(Math.random()*3).toFixed(1)}s;--dx:${(Math.random()*40-20).toFixed(0)}px;--dy:${(Math.random()*40-20).toFixed(0)}px;opacity:0.3;`;
+      const sz = Math.random() * 6 + 3;
+      p.style.cssText = `width:${sz}px;height:${sz}px;background:${pcols[i%pcols.length]};top:${Math.random()*100}%;left:${Math.random()*100}%;--dur:${(Math.random()*5+3).toFixed(1)}s;--delay:${(Math.random()*4).toFixed(1)}s;--dx:${(Math.random()*50-25).toFixed(0)}px;--dy:${(Math.random()*50-25).toFixed(0)}px;`;
       document.body.appendChild(p);
     }
 
@@ -505,10 +575,8 @@
       const glow   = document.getElementById('glow');
       const hint   = document.getElementById('hint');
       const reopen = document.getElementById('reopenHint');
-
       chest.classList.add('toggling');
-      setTimeout(() => chest.classList.remove('toggling'), 800);
-
+      setTimeout(() => chest.classList.remove('toggling'), 900);
       if (!isOpen) {
         isOpen = true;
         lid.classList.add('open');
@@ -516,7 +584,7 @@
         hint.classList.add('hidden');
         reopen.classList.remove('visible');
         launchConfetti();
-        setTimeout(() => document.getElementById('msgCard').classList.add('visible'), 700);
+        setTimeout(() => document.getElementById('msgCard').classList.add('visible'), 750);
       } else {
         isOpen = false;
         lid.classList.remove('open');
@@ -531,13 +599,13 @@
     }
 
     function launchConfetti() {
-      const shapes = ['■','●','▲','★','♦'];
-      const cols = ['#009246','#ce2b37','#c60b1e','#ffc400','#ffd700','#ffffff','#ff4488'];
-      for (let i = 0; i < 100; i++) {
+      const shapes = ['■','●','▲','★','♦','✦'];
+      const cols = ['#009246','#ce2b37','#ffc400','#ffd700','#fff','#cc88ff','#ff88cc'];
+      for (let i = 0; i < 110; i++) {
         const c = document.createElement('div');
         c.className = 'confetti-piece';
         c.textContent = shapes[Math.floor(Math.random()*shapes.length)];
-        c.style.cssText = `left:${Math.random()*100}vw;top:-20px;color:${cols[Math.floor(Math.random()*cols.length)]};font-size:${Math.random()*14+8}px;--dur:${(Math.random()*3+2).toFixed(1)}s;--delay:${(Math.random()*1.5).toFixed(2)}s;`;
+        c.style.cssText = `left:${Math.random()*100}vw;top:-20px;color:${cols[Math.floor(Math.random()*cols.length)]};font-size:${Math.random()*13+7}px;--dur:${(Math.random()*3+2.5).toFixed(1)}s;--delay:${(Math.random()*1.8).toFixed(2)}s;`;
         document.body.appendChild(c);
         c.addEventListener('animationend', () => c.remove());
       }
