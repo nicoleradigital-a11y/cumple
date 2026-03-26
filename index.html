@@ -329,11 +329,12 @@
       from { transform: rotate(0deg); }
       to   { transform: rotate(360deg); }
     }
-    #yt-player {
+    #yt-frame {
       position: fixed;
-      left: -9999px; top: -9999px;
-      width: 1px; height: 1px;
+      left: -9999px; top: 0;
+      width: 200px; height: 1px;
       pointer-events: none;
+      opacity: 0;
     }
 
     /* ===== RESPONSIVE — MOBILE ===== */
@@ -380,8 +381,13 @@
   <div class="corner-flag bl">🇪🇸</div>
   <div class="corner-flag br">🇮🇹</div>
 
-  <!-- Hidden YouTube player -->
-  <div id="yt-player"></div>
+  <!-- YouTube player iframe (off-screen but rendered) -->
+  <iframe id="yt-frame"
+    src="https://www.youtube.com/embed/CNHL66K8S2I?enablejsapi=1&controls=0&loop=1&playlist=CNHL66K8S2I"
+    allow="autoplay; encrypted-media"
+    allowfullscreen
+    frameborder="0">
+  </iframe>
 
   <!-- Music button -->
   <button class="music-btn" id="musicBtn" onclick="toggleMusic()">
@@ -435,32 +441,27 @@
     </div>
   </div>
 
-  <!-- YouTube IFrame API -->
-  <script src="https://www.youtube.com/iframe_api"></script>
   <script>
-    // ===== MUSIC =====
-    let ytPlayer, ytReady = false, isPlaying = false;
+    // ===== MUSIC via postMessage =====
+    let isPlaying = false;
 
-    function onYouTubeIframeAPIReady() {
-      ytPlayer = new YT.Player('yt-player', {
-        height: '1', width: '1',
-        videoId: 'CNHL66K8S2I', // Vivo per Lei - Andrea Bocelli
-        playerVars: { autoplay: 0, controls: 0, loop: 1, playlist: 'CNHL66K8S2I' },
-        events: { onReady: () => { ytReady = true; } }
-      });
+    function ytCmd(func) {
+      const frame = document.getElementById('yt-frame');
+      frame.contentWindow.postMessage(
+        JSON.stringify({ event: 'command', func: func, args: [] }), '*'
+      );
     }
 
     function toggleMusic() {
-      if (!ytReady) return;
       const btn   = document.getElementById('musicBtn');
       const label = document.getElementById('musicLabel');
       if (!isPlaying) {
-        ytPlayer.playVideo();
+        ytCmd('playVideo');
         isPlaying = true;
         btn.classList.add('playing');
         label.textContent = 'Pausa ♫';
       } else {
-        ytPlayer.pauseVideo();
+        ytCmd('pauseVideo');
         isPlaying = false;
         btn.classList.remove('playing');
         label.textContent = 'Vivo per Lei';
