@@ -289,6 +289,48 @@
       to   { transform: translate(var(--dx), var(--dy)) scale(1.3); opacity: 0.9; }
     }
 
+    /* ===== MUSIC BUTTON ===== */
+    .music-btn {
+      position: fixed;
+      bottom: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 60;
+      background: linear-gradient(135deg, #1a0a2e, #2a0a1e);
+      border: 2px solid #ffd700;
+      border-radius: 50px;
+      padding: 10px 22px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      box-shadow: 0 0 20px #ffd70055;
+      transition: box-shadow 0.3s, transform 0.2s;
+      color: #ffd700;
+      font-family: 'Georgia', serif;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      white-space: nowrap;
+    }
+    .music-btn:hover {
+      box-shadow: 0 0 35px #ffd700aa;
+      transform: translateX(-50%) scale(1.05);
+    }
+    .music-btn .note {
+      font-size: 1.2rem;
+      animation: noteBounce 1.2s ease-in-out infinite;
+    }
+    .music-btn.playing .note { animation: noteSpin 0.8s linear infinite; }
+    @keyframes noteBounce {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-4px); }
+    }
+    @keyframes noteSpin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    #yt-player { display: none; }
+
     /* ===== RESPONSIVE — MOBILE ===== */
     @media (max-width: 480px) {
       .corner-flag { font-size: 1.4rem; }
@@ -317,6 +359,7 @@
       .close-btn   { padding: 10px 24px; font-size: 0.95rem; }
 
       .hint        { font-size: 0.9rem; }
+      .music-btn   { bottom: 14px; padding: 9px 18px; font-size: 0.82rem; }
     }
   </style>
 </head>
@@ -331,6 +374,15 @@
   <div class="corner-flag tr">🇪🇸</div>
   <div class="corner-flag bl">🇪🇸</div>
   <div class="corner-flag br">🇮🇹</div>
+
+  <!-- Hidden YouTube player -->
+  <div id="yt-player"></div>
+
+  <!-- Music button -->
+  <button class="music-btn" id="musicBtn" onclick="toggleMusic()">
+    <span class="note">♪</span>
+    <span id="musicLabel">Vivo per Lei</span>
+  </button>
 
   <div class="stars" id="stars"></div>
 
@@ -377,6 +429,39 @@
       <button class="close-btn" onclick="closeCard()">Grazie mille! 🎉</button>
     </div>
   </div>
+
+  <!-- YouTube IFrame API -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script>
+    // ===== MUSIC =====
+    let ytPlayer, ytReady = false, isPlaying = false;
+
+    function onYouTubeIframeAPIReady() {
+      ytPlayer = new YT.Player('yt-player', {
+        height: '1', width: '1',
+        videoId: 'dQqCOdBEOFc', // Vivo per Lei - Andrea Bocelli
+        playerVars: { autoplay: 0, controls: 0, loop: 1, playlist: 'dQqCOdBEOFc' },
+        events: { onReady: () => { ytReady = true; } }
+      });
+    }
+
+    function toggleMusic() {
+      if (!ytReady) return;
+      const btn   = document.getElementById('musicBtn');
+      const label = document.getElementById('musicLabel');
+      if (!isPlaying) {
+        ytPlayer.playVideo();
+        isPlaying = true;
+        btn.classList.add('playing');
+        label.textContent = 'Pausa ♫';
+      } else {
+        ytPlayer.pauseVideo();
+        isPlaying = false;
+        btn.classList.remove('playing');
+        label.textContent = 'Vivo per Lei';
+      }
+    }
+  </script>
 
   <script>
     const starsEl = document.getElementById('stars');
