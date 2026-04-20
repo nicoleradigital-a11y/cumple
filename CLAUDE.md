@@ -4,15 +4,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-A single-page birthday greeting for "Rafy" — a personal, interactive HTML page with Italian/Spanish cultural theming. No build system, no dependencies, no package manager.
+A single-page gratitude page for Iñi — a personal, interactive HTML page with Spanish and republican flag theming. No build system, no dependencies, no package manager.
 
 ## Running Locally
 
 Open `index.html` directly in a browser, or serve via Docker:
 
 ```bash
-docker build -t rafy-birthday .
-docker run -p 8080:80 rafy-birthday
+docker build -t gracias-ini .
+docker run -p 8080:80 gracias-ini
 # Then open http://localhost:8080
 ```
 
@@ -20,18 +20,16 @@ docker run -p 8080:80 rafy-birthday
 
 Everything lives in a single file: [index.html](index.html)
 
-- **CSS** (lines 7–369): Inline styles. Sections marked with `/* ===== SECTION NAME ===== */` comments.
-- **HTML** (lines 371–436): Static structure — flag banners, off-screen YouTube player div, chest widget, message card overlay.
-- **JavaScript** (lines 438–545): Two `<script>` blocks:
-  1. YouTube IFrame API integration — loads asynchronously, handles `ytReady`/`pendingPlay` state for deferred playback of video ID `CNHL66K8S2I` ("Vivo per Lei").
-  2. DOM generation + interaction — stars (120), floating particles (22), chest open/close toggle, confetti burst (100 pieces), card close.
+- **CSS**: Inline styles for the full-screen scene, chest, card overlay, flags, and music control.
+- **HTML**: Static structure — flag banners, chest widget, message card overlay, and local audio element.
+- **JavaScript**: DOM generation + interaction — stars, chest open/close toggle, confetti burst, card close, and local audio play/pause state.
 
 ## Key Interaction Flow
 
 1. User clicks the CSS-drawn treasure chest → `toggleChest()` opens lid, triggers confetti, shows `.message-card` overlay after 700ms delay.
-2. Music button → `toggleMusic()` plays/pauses via YouTube IFrame API (requires internet connection).
-3. Photos in the card (`WhatsApp Image 2026-03-26 at *.jpeg`) must be present alongside `index.html`.
+2. Music button → `toggleMusic()` plays/pauses the local `marcha-real.ogg` audio file.
+3. Photos in the card reuse `foto-ini-amigos.jpg`, which must stay alongside `index.html`.
 
 ## Assets
 
-Two JPEG photos are referenced by filename with spaces — paths must stay exactly as-is or both the HTML `src` attributes and filenames must be updated together.
+The project depends on two local assets next to `index.html`: `foto-ini-amigos.jpg` and `marcha-real.ogg`.
